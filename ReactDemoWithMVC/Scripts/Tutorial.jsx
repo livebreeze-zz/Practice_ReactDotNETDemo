@@ -1,9 +1,25 @@
 ﻿var CommentBox = React.createClass({
+    loadCommentsFromServer: function () {
+        var xhr = new XMLHttpRequest();
+        xhr.open('get', this.props.url, true);
+        xhr.onload = function () {
+            var data = JSON.parse(xhr.responseText);
+            this.setState({ data: data });
+        }.bind(this);
+        xhr.send();
+    },
+    getInitialState: function () {
+        return { data: [] };
+    },
+    componentDidMount: function () {
+        this.loadCommentsFromServer();
+        //window.setInterval(this.loadCommentsFromServer, this.props.pollInterval);
+    },
     render: function () {
         return (
             <div className="commentBox">
                 <h1>Comments</h1>
-                <CommentList data={this.props.data} />
+                <CommentList data={this.state.data} />
                 <CommentForm />
             </div>
         );
@@ -51,14 +67,7 @@ var Comment = React.createClass({
     }
 });
 
-
-var data = [
-    { Id: 1, Author: "Daniel Lo Nigro", Text: "Hello ReactJS.NET World!" },
-    { Id: 2, Author: "Pete Hunt", Text: "This is one comment" },
-    { Id: 3, Author: "Jordan Walke", Text: "This is *another* comment" }
-];
-
 ReactDOM.render(
-    <CommentBox data={data} />,
+    <CommentBox url="/comments" />,
     document.getElementById('content')
 );
