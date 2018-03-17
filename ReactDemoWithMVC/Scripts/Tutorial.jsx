@@ -13,7 +13,7 @@
     },
     componentDidMount: function () {
         this.loadCommentsFromServer();
-        //window.setInterval(this.loadCommentsFromServer, this.props.pollInterval);
+        window.setInterval(this.loadCommentsFromServer, this.props.pollInterval);
     },
     render: function () {
         return (
@@ -68,6 +68,6 @@ var Comment = React.createClass({
 });
 
 ReactDOM.render(
-    <CommentBox url="/comments" />,
+    <CommentBox url="/comments" pollInterval={2000} />,
     document.getElementById('content')
 );
